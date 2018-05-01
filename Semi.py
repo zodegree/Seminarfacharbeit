@@ -203,7 +203,8 @@ def add(o):
         s = ["+",k]
         li.append(s)
     else:
-        pass
+        s = ["+",k]
+        li.append(s)
 
     return li
 
@@ -225,6 +226,9 @@ def out(o):
     while "+-" in a:
         ix = a.index("+-")
         a = a[:ix] + "-" + a[ix+2:]
+    while "+0.0" in a:
+        ix = a.index("+0.0")
+        a = a[:ix] + a[ix + 4:]
     return a
 
 def mult(o):
@@ -328,5 +332,3 @@ def umst(a,b,w):
 #gll3 = add(wo[0])
 #glr3 = add(wo[1])
 #print(out(gll3)+"="+out(glr3))
-
-ü("x=5*5","x")
