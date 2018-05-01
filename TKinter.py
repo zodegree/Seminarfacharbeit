@@ -1,5 +1,6 @@
 from tkinter import *
 import Semi
+import random
 
 #def GL_ADD(nframe):
 #    Text(nframe, height=2, width=2)
@@ -12,6 +13,56 @@ import Semi
 #    n1 = IN1.get()
 #    n2 = IN2.get()
 #    return(n1,n2)
+
+def Lernprogramm():
+    nframe=Tk()
+    def GL_VGL(iget):
+        outpr = Semi.ü(out, "x")
+        outpr = outpr.split("=")
+        outpr = outpr[0] + "=" + str(round(float(outpr[1]), 2))
+        if(iget == outpr):
+            L = Label(nframe,text="Lösung ist Richtig!").pack(side="top")
+        else:
+            L = Label(nframe, text="Lösung oder Eingabeform ist Falsch! Das richtige Ergebnis lautet:"+out).pack(side="top")
+
+    left_obj = []
+    right_obj = []
+    left_objanz = random.randrange(1,5,1)
+    right_objanz = random.randrange(1,5,1)
+    for i in range(0,left_objanz,1):
+        obj = []
+        if(random.random()>0.5):
+            obj.append("+")
+        else:
+            obj.append("-")
+        if(random.random()>0.7):
+            obj.append(float(random.randrange(1,9990,1)/10))
+        else:
+            obj.append("x")
+            obj.append(random.randrange(1,500,1)/10)
+        left_obj.append(obj)
+    for i in range(0,right_objanz,1):
+        obj = []
+        if(random.random()>0.5):
+            obj.append("+")
+        else:
+            obj.append("-")
+        if(random.random()>0.7):
+            obj.append(float(random.randrange(1,9990,1)/10))
+        else:
+            obj.append("x")
+            obj.append(random.randrange(1,500,1)/10)
+        right_obj.append(obj)
+    print(left_obj,right_obj)
+    out = Semi.out(left_obj)+"="+Semi.out(right_obj)
+    if("x" not in out):
+        out = out+"x"
+    T = Label(nframe,width=70,text="Lösen sie folgende Gleichung. Beachten sie dabei die Form x=errechnete Zahl\n, zu nutzen, sowie die errechnete Zahl als auf 2 Dezimalstellen \nnach dem Komma nach dem Bruch anzugeben\n. Bei Zahlen, welche auf ,00 enden würden bitte .0 angeben. \n Im allgemeinen ist das Komma durch einen Punkt zu ersetzen.")
+    T.pack(side="top")
+    L = Label(nframe,text=out).pack(side="top")
+    IN = Entry(nframe).pack(side="top")
+    B = Button(nframe,text="Ergebnis prüfen",command=lambda: GL_VGL(IN.get())).pack(side="top")
+    nframe.mainloop()
 
 def GL_UMST():
     def GL_PRINT(n,w):
@@ -98,9 +149,9 @@ y = (hs/2) - (h/2)
 # and where it is placed
 mainframe.geometry('%dx%d+%d+%d' % (w, h, x, y))
 
-b1 = Button(mainframe, text="Gleichungen umstellen", command=GL_UMST)
+b1 = Button(mainframe, text="Linare Gleichung umstellen", command=GL_UMST)
 b1.place(relx=0.5, rely=0.4, anchor=CENTER)
-b2 = Button(mainframe, text="Lineare Gleichungen anzeigen", command=GL_UMST)
+b2 = Button(mainframe, text="Lernprogramm starten", command=Lernprogramm)
 b2.place(relx=0.5, rely=0.5, anchor=CENTER)
 b3 = Button(mainframe, text="Gleichungssysteme berechnen", command=GL_SYS)
 b3.place(relx=0.5, rely=0.6, anchor=CENTER)
