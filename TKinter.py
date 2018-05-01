@@ -37,7 +37,6 @@ def GL_SYS():
     n = []
 
     def GL_RES():
-        n = ["2x-2=y", "2.5x+5x-13-1=y"]
         varlist = ["x", "y"]
         # for i in n:
         #    for j in range(0,len(i),1):
@@ -58,8 +57,9 @@ def GL_SYS():
             delindex = n[0].index(var)
             n[0] = n[0][:delindex] + out[2:] + n[0][delindex + 1:]
         print(n[0], "USE")
-        n[0] = Semi.ü(n[0], varlist[0])
-        L = Label(nframe, text="SP = ("+out[2:]+"|"+UseGL[2:]+")")
+        UseGL = Semi.ü(n[0], varlist[0])
+        print(UseGL)
+        L = Label(nframe, text="SP = ("+str(round(float(out[2:]),3))+"|"+str(round(float(UseGL[2:]),3))+")").pack(side="bottom")
 
 
 

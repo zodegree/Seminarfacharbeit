@@ -138,6 +138,9 @@ def vereinf(x):
                             q = mult([[0, t[:k]+"1"]])
                             gl[i].append(q[0][1])
                     k += 1
+                q = mult([[0, t]])
+                gl[i][1]=q[0][1]
+                print(gl[i],"q")
             else:
                 for k in range(0, len(t), 1):
                     if(t[k] in alphabet and k!=0):
@@ -171,7 +174,7 @@ def add(o):
     for i in range(0, len(o), 1):
         if (f != 0 and str(o[i][1]) not in alphabet):
             o[i][1] *= (10**f)
-    print(o,search_list)
+    print(o,search_list,"sl")
     for r in range (0, len(search_list), 1):
         addvalue = 0
         try:
@@ -325,3 +328,5 @@ def umst(a,b,w):
 #gll3 = add(wo[0])
 #glr3 = add(wo[1])
 #print(out(gll3)+"="+out(glr3))
+
+ü("x=5*5","x")
