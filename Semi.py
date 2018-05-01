@@ -325,5 +325,3 @@ def umst(a,b,w):
 #gll3 = add(wo[0])
 #glr3 = add(wo[1])
 #print(out(gll3)+"="+out(glr3))
-
-ü("5x*4+5=10x","x")
