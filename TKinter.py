@@ -36,18 +36,40 @@ def GL_SYS():
     nframe = Tk()
     n = []
     def GL_RES():
-        varlist = []
-        for i in n:
-            for j in range(0,len(i),1):
-                if(i[j] not in varlist and i[j] in alphabet):
-                    varlist.append(i[j])
-        print(varlist)
+        varlist = [x,y]
+        #for i in n:
+        #    for j in range(0,len(i),1):
+        #        if(i[j] not in varlist and i[j] in alphabet):
+        #            varlist.append(i[j])
+        for i in range(0, 2, 1):
+            var = varlist[i]
+            GL=n[0]
+            GL2=n[1]
+            print(var)
+            if(var in GL):
+                if(i==0):
+                    UseGL = Semi.ü(GL,var)
+                    UseGL2 = Semi.ü(GL2,var)
+                else:
+                    n.append(UseGL.split("="))
+                    n.append(UseGL2.split("="))
+                    out = Semi.ü(n[1]+n[3],var)
+        for var in UseGL:
+            delindex = UseGL.index(var)
+            UseGL = UseGL[:delindex] + out[2:] + UseGL[delindex+1:]
+        UseGL = Semi.ü(UseGL,varlist[0])
+        L = Label(nframe, text="SP = ("+out[2:]+"|"+UseGL[2:]+")")
+
+
+
+
+
 
     def GL_PRINT():
         n.append(IN.get())
         L = Label(nframe, text=IN.get()).pack(side="top")
         if(len(n) >= 2):
-            B = Button(nframe, text="Gleichungssystem berechnen", command=lambda: GL_RES()).pack(side="bottom")
+            B = Button(nframe, text="Schnittpunkte berechnen", command=lambda: GL_RES()).pack(side="bottom")
 
     for widget in nframe.winfo_children():
         widget.destroy()
