@@ -36,7 +36,7 @@ def GL_SYS():
     nframe = Tk()
     n = []
     def GL_RES():
-        varlist = [x,y]
+        varlist = ["x","y"]
         #for i in n:
         #    for j in range(0,len(i),1):
         #        if(i[j] not in varlist and i[j] in alphabet):
@@ -45,16 +45,15 @@ def GL_SYS():
             var = varlist[i]
             GL=n[0]
             GL2=n[1]
-            print(var)
+            print(varlist[i],varlist)
             if(var in GL):
                 if(i==0):
                     UseGL = Semi.ü(GL,var)
                     UseGL2 = Semi.ü(GL2,var)
                 else:
-                    n.append(UseGL.split("="))
-                    n.append(UseGL2.split("="))
-                    out = Semi.ü(n[1]+n[3],var)
-        for var in UseGL:
+                    print(UseGL,UseGL2)
+                    out = Semi.ü(UseGL[2:]+"="+UseGL2[2:],var)
+        while var in UseGL:
             delindex = UseGL.index(var)
             UseGL = UseGL[:delindex] + out[2:] + UseGL[delindex+1:]
         UseGL = Semi.ü(UseGL,varlist[0])
