@@ -125,8 +125,8 @@ def vereinf(x):
                     if (t[k] in alphabet):
                         try:
                             if(t[k+1] in operations):
-                                t = t[k+2:] + "*" + t[:k]
-                                print(t,"t")
+                                t = t[k+2:] + "*" + t[:k+1]
+                                k = len(t)-1
                         except IndexError:
                             pass
                         try:
@@ -326,4 +326,4 @@ def umst(a,b,w):
 #glr3 = add(wo[1])
 #print(out(gll3)+"="+out(glr3))
 
-ü("5x*4+5=x","x")
+ü("5x*4+5=10x","x")
