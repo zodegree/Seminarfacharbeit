@@ -23,7 +23,7 @@ def Lernprogramm():
         if(iget == outpr):
             L = Label(nframe,text="Lösung ist Richtig!").pack(side="top")
         else:
-            L = Label(nframe, text="Lösung oder Eingabeform ist Falsch! Das richtige Ergebnis lautet:"+out).pack(side="top")
+            L = Label(nframe, text="Lösung oder Eingabeform ist Falsch! Das richtige Ergebnis lautet:"+outpr).pack(side="top")
 
     left_obj = []
     right_obj = []
@@ -60,7 +60,8 @@ def Lernprogramm():
     T = Label(nframe,width=70,text="Lösen sie folgende Gleichung. Beachten sie dabei die Form x=errechnete Zahl\n, zu nutzen, sowie die errechnete Zahl als auf 2 Dezimalstellen \nnach dem Komma nach dem Bruch anzugeben\n. Bei Zahlen, welche auf ,00 enden würden bitte .0 angeben. \n Im allgemeinen ist das Komma durch einen Punkt zu ersetzen.")
     T.pack(side="top")
     L = Label(nframe,text=out).pack(side="top")
-    IN = Entry(nframe).pack(side="top")
+    IN = Entry(nframe)
+    IN.pack(side="top")
     B = Button(nframe,text="Ergebnis prüfen",command=lambda: GL_VGL(IN.get())).pack(side="top")
     nframe.mainloop()
 

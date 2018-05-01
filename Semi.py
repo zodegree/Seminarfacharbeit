@@ -338,5 +338,3 @@ def umst(a,b,w):
 #gll3 = add(wo[0])
 #glr3 = add(wo[1])
 #print(out(gll3)+"="+out(glr3))
-
-ü("3x-y=5","x")
