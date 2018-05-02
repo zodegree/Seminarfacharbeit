@@ -67,9 +67,18 @@ def Lernprogramm():
     nframe.mainloop()
 
 def GL_UMST():
-    def GL_PRINT(n,w):
+    def GL_NEWANZ(L,popup,n,w):
+        popup.kill()
+        L.config(text=Semi.sy(n,w))
 
+    def GL_PRINT(n,w):
         L = Label(nframe, text=Semi.ü(n,w)).grid(row=2,column=1)
+        if (Semi.ü(n, w) != Semi.sy(n, w)):
+            popup = Tk()
+            L1 = Label(popup, text="Beim Lösen der Gleichung ist ein Fehler aufgetreten.\nBitte drücken sie auf Ok um die \n richtige Lösung angezeigt zu bekommen.")
+            L1.pack(side="top")
+            B = Button(popup, text="ok", command= lambda: GL_NEWANZ(L,popup,n,w))
+            popup.mainloop()
 
     nframe=Tk()
     T = Label(nframe, text="Geben sie die zu lösende Gleichung ein:")

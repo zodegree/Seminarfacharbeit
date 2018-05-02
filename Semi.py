@@ -1,3 +1,4 @@
+import time
 from sympy import *
 def ü(n,w):
     n = n.split("=")
@@ -20,6 +21,7 @@ def sy(n,w):
     eq = Eq(eq_1,eq_2)
     result = str(solveset(eq,w))
     result = result[1:-1]
+    result = w+"="+result
     print(result)
     return result
 
@@ -227,7 +229,10 @@ def out(o):
         elif(str(o[i][1]) in alphabet and o[i][2] == -1):
             a = a + str(o[i][0]) + "-" + str(o[i][1])
         else:
-            a = a + str(o[i][0]) + str(o[i][1])
+            cpy = str(o[i][1])
+            if(cpy[-2:]==".0"):
+                cpy = cpy[:-2]
+            a = a + str(o[i][0]) + cpy
         if(i==0 and a[0]=="+"):
             a = a[1:]
     while "--" in a:
@@ -344,5 +349,5 @@ def umst(a,b,w):
 #glr3 = add(wo[1])
 #print(out(gll3)+"="+out(glr3))
 
-ü("5x+56=19","x")
-#sy("5*x+56=19","x")
+ü("x+5=10","x")
+#sy("x+5=10","x")
