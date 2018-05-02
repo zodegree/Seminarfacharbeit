@@ -14,7 +14,7 @@ def ü(n,w):
 
 def klm(x,m):
     # Ablauf der Vereinfachung
-    print(x,"IN")
+    print(x,m,"INm")
     alphabet = "abcdefghijklmnopqrstuvwxyz"
     x = vereinf(x)
     for i in range (0, len(x), 1):
@@ -27,7 +27,7 @@ def klm(x,m):
     x = out(x)
     if (x[0] != "-"):
         x = "+"+x
-    print(x, "A")
+    print(x, "Am")
     return x
 
 def kl(x):
@@ -51,24 +51,30 @@ def vereinf(x):
     # Klammern werden von innen nach außen aufgelöst und einzeln vereinfacht
     while i < n:
         if (x[i] == "("):
-            nc = i
+            nc = i-1
             if(x[i-1]=="*"):
-                while nc != 0:
+                while nc != -1:
                     nc -= 1
-                    if(x[nc] in operations):
+                    if(x[nc] in operations and nc != 0):
                         mlt = float(x[nc-1:i-1])
+                        break
+                    elif(x[nc] in operations and nc == 0):
+                        mlt = float(x[:i - 1])
                         break
             a = i
         if (x[i] == ")" and a != 0):
             if(mlt != "M" and nc == 0):
-                print(nc,"BLYAT")
                 x = klm(x[a + 1:i],mlt) + x[i + 1:]
+                mlt = "M"
             elif(mlt != "M"):
                 x = x[:nc]+klm(x[a + 1:i], mlt) + x[i + 1:]
+                mlt = "M"
             else:
                 x = x[:a]+kl(x[a+1:i])+x[i+1:]
+                print(x,"kl")
         elif (x[i] == ")"):
             x = kl(x[a + 1:i]) + x[i + 1:]
+            print(x, "kl")
         i += 1
         n = len(x)
 #    while "--" in x:
@@ -119,8 +125,9 @@ def vereinf(x):
             gl[i][1] = float(gl[i][1])
         except ValueError:
             t = str(gl[i][1]) # string mit Variable
+            q = 0
+            k = 0
             if("*" in t):
-                k = 0
                 while k < len(t):
                     if (t[k] in alphabet):
                         try:
@@ -133,14 +140,16 @@ def vereinf(x):
                             gl[i][1] = t[k:]
                             q = mult([[0,t[:k]]])
                             gl[i].append(q[0][1])
+
                         except IndexError:
                             gl[i][1] = t[k:]
                             q = mult([[0, t[:k]+"1"]])
                             gl[i].append(q[0][1])
                     k += 1
-                q = mult([[0, t]])
-                gl[i][1]=q[0][1]
-                print(gl[i],"q")
+                if(q == 0):
+                    q = mult([[0, t]])
+                    gl[i][1]=q[0][1]
+                    print(gl[i],"q")
             else:
                 for k in range(0, len(t), 1):
                     if(t[k] in alphabet and k!=0):
@@ -205,7 +214,7 @@ def add(o):
     else:
         s = ["+",k]
         li.append(s)
-
+    print(li,"li")
     return li
 
 def out(o):
@@ -274,9 +283,11 @@ def umst(a,b,w):
             if(a[i][0] == "+" and i != e):
                 a[i][0] = "-"
                 f.append(a[i])
-            if(a[i][0] == "-" and i != e):
+                print("+")
+            elif(a[i][0] == "-" and i != e):
                 a[i][0] = "+"
                 f.append(a[i])
+                print("-")
         for i in range(0, len(b), 1):
             if(b[i][1] == w):
                 cs = b[i]
@@ -299,14 +310,13 @@ def umst(a,b,w):
             if (a[i][0] == "+" and i != e):
                 a[i][0] = "-"
                 f.append(a[i])
-            if (a[i][0] == "-" and i != e):
+            elif (a[i][0] == "-" and i != e):
                 a[i][0] = "+"
                 f.append(a[i])
         for i in range(0, len(b), 1):
             if (b[i] == w):
                 pass
             f.append(b[i])
-    print(c,"c")
     c = add(c)
     if(c[0][0] == "-"):
         m = c[0][2]*-1
@@ -338,3 +348,5 @@ def umst(a,b,w):
 #gll3 = add(wo[0])
 #glr3 = add(wo[1])
 #print(out(gll3)+"="+out(glr3))
+
+ü("(5+6)*(5+x)=10","x")

@@ -1,6 +1,7 @@
 from tkinter import *
 import Semi
 import random
+import sympy as sy
 
 #def GL_ADD(nframe):
 #    Text(nframe, height=2, width=2)
