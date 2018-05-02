@@ -89,6 +89,7 @@ def vereinf(x):
                 if (x[k] in operations):
                     break
                 k += 1
+            print("TEST")
             u = 1 / float(x[i + 1:k])
             x = x[:i] + "*" + str(u) + x[k:]
             i = 0

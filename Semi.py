@@ -94,7 +94,10 @@ def vereinf(x):
         ix = x.index("-+")
         x = x[:ix] + "-" + x[ix+2:]
     # Division wird in Multiplikation umgewandelt
+    print("TEST")
+    i = 0
     while i < n:
+        print(x[i],i)
         if (x[i] == "/"):
             k = i + 1
             while k < len(x):
@@ -241,8 +244,8 @@ def out(o):
     while "+-" in a:
         ix = a.index("+-")
         a = a[:ix] + "-" + a[ix+2:]
-    while "+0.0" in a:
-        ix = a.index("+0.0")
+    while "+0" in a:
+        ix = a.index("+0")
         a = a[:ix] + a[ix + 4:]
     return a
 
@@ -349,5 +352,6 @@ def umst(a,b,w):
 #glr3 = add(wo[1])
 #print(out(gll3)+"="+out(glr3))
 
-ü("x+5=10","x")
-#sy("x+5=10","x")
+#ü("x+5/6*8=10","x")
+sy("x+5/6*8=10","x")
+print(10/3)
