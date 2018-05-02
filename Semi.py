@@ -1,3 +1,4 @@
+from sympy import *
 def ü(n,w):
     n = n.split("=")
     gll = n[0]
@@ -12,9 +13,18 @@ def ü(n,w):
     print(out(gll3) + "=" + out(glr3))
     return(out(gll3) + "=" + out(glr3))
 
+def sy(n,w):
+    n = n.split("=")
+    eq_1 = sympify(n[0])
+    eq_2 = sympify(n[1])
+    eq = Eq(eq_1,eq_2)
+    result = str(solveset(eq,w))
+    result = result[1:-1]
+    print(result)
+    return result
+
 def klm(x,m):
     # Ablauf der Vereinfachung
-    print(x,m,"INm")
     alphabet = "abcdefghijklmnopqrstuvwxyz"
     x = vereinf(x)
     for i in range (0, len(x), 1):
@@ -27,18 +37,15 @@ def klm(x,m):
     x = out(x)
     if (x[0] != "-"):
         x = "+"+x
-    print(x, "Am")
     return x
 
 def kl(x):
     # Ablauf der Vereinfachung
-    print(x,"IN")
     x = vereinf(x)
     x = add(x)
     x = out(x)
     if (x[0] != "-"):
         x = "+"+x
-    print(x, "A")
     return x
 
 def vereinf(x):
@@ -71,10 +78,8 @@ def vereinf(x):
                 mlt = "M"
             else:
                 x = x[:a]+kl(x[a+1:i])+x[i+1:]
-                print(x,"kl")
         elif (x[i] == ")"):
             x = kl(x[a + 1:i]) + x[i + 1:]
-            print(x, "kl")
         i += 1
         n = len(x)
 #    while "--" in x:
@@ -86,7 +91,6 @@ def vereinf(x):
     while "-+" in x:
         ix = x.index("-+")
         x = x[:ix] + "-" + x[ix+2:]
-    print(x,"x")
     # Division wird in Multiplikation umgewandelt
     while i < n:
         if (x[i] == "/"):
@@ -149,7 +153,6 @@ def vereinf(x):
                 if(q == 0):
                     q = mult([[0, t]])
                     gl[i][1]=q[0][1]
-                    print(gl[i],"q")
             else:
                 for k in range(0, len(t), 1):
                     if(t[k] in alphabet and k!=0):
@@ -183,7 +186,6 @@ def add(o):
     for i in range(0, len(o), 1):
         if (f != 0 and str(o[i][1]) not in alphabet):
             o[i][1] *= (10**f)
-    print(o,search_list,"sl")
     for r in range (0, len(search_list), 1):
         addvalue = 0
         try:
@@ -214,7 +216,6 @@ def add(o):
     else:
         s = ["+",k]
         li.append(s)
-    print(li,"li")
     return li
 
 def out(o):
@@ -241,7 +242,6 @@ def out(o):
     return a
 
 def mult(o):
-    print(o,"mult")
     alphabet = "abcdefghijklmnopqrstuvwxyz"
     for i in range(0, len(o), 1):
 
@@ -260,12 +260,9 @@ def mult(o):
                 n[0] = float(n[0])*float(n[1])
                 n.remove(n[1])
                 o[i][1] = n[0]
-
-    print(o,"o")
     return o
 
 def umst(a,b,w):
-    print(a,b,"x")
     alphabet = "abcdefghijklmnopqrstuvwxyz"
     c = []
     for i in range (0, len(a), 1):
@@ -283,11 +280,9 @@ def umst(a,b,w):
             if(a[i][0] == "+" and i != e):
                 a[i][0] = "-"
                 f.append(a[i])
-                print("+")
             elif(a[i][0] == "-" and i != e):
                 a[i][0] = "+"
                 f.append(a[i])
-                print("-")
         for i in range(0, len(b), 1):
             if(b[i][1] == w):
                 cs = b[i]
@@ -349,4 +344,5 @@ def umst(a,b,w):
 #glr3 = add(wo[1])
 #print(out(gll3)+"="+out(glr3))
 
-ü("(5+x)*(5+x)=10","x")
+ü("5x+56=19","x")
+#sy("5*x+56=19","x")
