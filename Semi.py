@@ -1,20 +1,35 @@
+import time
+from sympy import *
 def ü(n,w):
     n = n.split("=")
     gll = n[0]
     glr = n[1]
     gll1 = vereinf(gll)
     glr1 = vereinf(glr)
+    if(gll1 == 0 or glr1 == 0):
+        return "ERROR"
     gll2 = add(gll1)
     glr2 = add(glr1)
     wo = umst(gll2, glr2, w)
     gll3 = add(wo[0])
     glr3 = add(wo[1])
+    print(glr3)
     print(out(gll3) + "=" + out(glr3))
     return(out(gll3) + "=" + out(glr3))
 
+def sy(n,w):
+    n = n.split("=")
+    eq_1 = sympify(n[0])
+    eq_2 = sympify(n[1])
+    eq = Eq(eq_1,eq_2)
+    result = str(solveset(eq,w))
+    result = result[1:-1]
+    result = w+"="+result
+    print(result)
+    return result
+
 def klm(x,m):
     # Ablauf der Vereinfachung
-    print(x,"IN")
     alphabet = "abcdefghijklmnopqrstuvwxyz"
     x = vereinf(x)
     for i in range (0, len(x), 1):
@@ -27,18 +42,17 @@ def klm(x,m):
     x = out(x)
     if (x[0] != "-"):
         x = "+"+x
-    print(x, "A")
     return x
 
 def kl(x):
     # Ablauf der Vereinfachung
-    print(x,"IN")
     x = vereinf(x)
+    if(x==0):
+        return "ERROR"
     x = add(x)
     x = out(x)
     if (x[0] != "-"):
         x = "+"+x
-    print(x, "A")
     return x
 
 def vereinf(x):
@@ -51,20 +65,24 @@ def vereinf(x):
     # Klammern werden von innen nach außen aufgelöst und einzeln vereinfacht
     while i < n:
         if (x[i] == "("):
-            nc = i
+            nc = i-1
             if(x[i-1]=="*"):
-                while nc != 0:
+                while nc != -1:
                     nc -= 1
-                    if(x[nc] in operations):
+                    if(x[nc] in operations and nc != 0):
                         mlt = float(x[nc-1:i-1])
+                        break
+                    elif(x[nc] in operations and nc == 0):
+                        mlt = float(x[:i - 1])
                         break
             a = i
         if (x[i] == ")" and a != 0):
             if(mlt != "M" and nc == 0):
-                print(nc,"BLYAT")
                 x = klm(x[a + 1:i],mlt) + x[i + 1:]
+                mlt = "M"
             elif(mlt != "M"):
                 x = x[:nc]+klm(x[a + 1:i], mlt) + x[i + 1:]
+                mlt = "M"
             else:
                 x = x[:a]+kl(x[a+1:i])+x[i+1:]
         elif (x[i] == ")"):
@@ -80,8 +98,8 @@ def vereinf(x):
     while "-+" in x:
         ix = x.index("-+")
         x = x[:ix] + "-" + x[ix+2:]
-    print(x,"x")
     # Division wird in Multiplikation umgewandelt
+    i = 0
     while i < n:
         if (x[i] == "/"):
             k = i + 1
@@ -89,7 +107,12 @@ def vereinf(x):
                 if (x[k] in operations):
                     break
                 k += 1
-            u = 1 / float(x[i + 1:k])
+            try:
+                u = 1 / float(x[i + 1:k])
+            except IndexError:
+                print("Ie")
+                return 0
+
             x = x[:i] + "*" + str(u) + x[k:]
             i = 0
         i += 1
@@ -119,8 +142,9 @@ def vereinf(x):
             gl[i][1] = float(gl[i][1])
         except ValueError:
             t = str(gl[i][1]) # string mit Variable
+            q = 0
+            k = 0
             if("*" in t):
-                k = 0
                 while k < len(t):
                     if (t[k] in alphabet):
                         try:
@@ -133,11 +157,23 @@ def vereinf(x):
                             gl[i][1] = t[k:]
                             q = mult([[0,t[:k]]])
                             gl[i].append(q[0][1])
+
                         except IndexError:
                             gl[i][1] = t[k:]
                             q = mult([[0, t[:k]+"1"]])
                             gl[i].append(q[0][1])
+
+                        except TypeError:
+                            print("TE")
+                            return 0
+
                     k += 1
+                if(q == 0):
+                    q = mult([[0, t]])
+                    if (q==0):
+                        print("q0")
+                        return 0
+                    gl[i][1]=q[0][1]
             else:
                 for k in range(0, len(t), 1):
                     if(t[k] in alphabet and k!=0):
@@ -171,16 +207,18 @@ def add(o):
     for i in range(0, len(o), 1):
         if (f != 0 and str(o[i][1]) not in alphabet):
             o[i][1] *= (10**f)
-    print(o,search_list)
     for r in range (0, len(search_list), 1):
         addvalue = 0
         try:
             if(search_list[r] in alphabet and search_list[r] not in twiceattemp):
                 twiceattemp.append(search_list[r])
                 for n in range(0, len(search_list), 1):
-                    if(search_list[r] == search_list[n]):
+                    if(search_list[r] == search_list[n] and o[n][0]=="+"):
                         addvalue += o[n][2]
+                    elif(search_list[r] == search_list[n] and o[n][0]=="-"):
+                        addvalue -= o[n][2]
                 o[r][2] = addvalue
+                o[r][0] = "+"
                 li.append(o[r])
         except TypeError:
             pass
@@ -200,8 +238,8 @@ def add(o):
         s = ["+",k]
         li.append(s)
     else:
-        pass
-
+        s = ["+",k]
+        li.append(s)
     return li
 
 def out(o):
@@ -209,47 +247,57 @@ def out(o):
     a = ""
     for i in range(0, len(o), 1):
         if (str(o[i][1]) in alphabet and o[i][2] != 1):
-            a = a + str(o[i][0]) + str(o[i][2]) + str(o[i][1])
+            cpy = str(o[i][2])
+            if (cpy[-2:] == ".0"):
+                cpy = cpy[:-2]
+            a = a + str(o[i][0]) + cpy + str(o[i][1])
         elif(str(o[i][1]) in alphabet and o[i][2] == -1):
             a = a + str(o[i][0]) + "-" + str(o[i][1])
         else:
-            a = a + str(o[i][0]) + str(o[i][1])
+            cpy = str(o[i][1])
+            if(cpy[-2:]==".0"):
+                cpy = cpy[:-2]
+            a = a + str(o[i][0]) + cpy
         if(i==0 and a[0]=="+"):
             a = a[1:]
     while "--" in a:
         ix = a.index("--")
-        a = a[:ix] + "+" + a[ix+2:]
+        a = a[:ix] + "+" + a[ix+3:]
     while "+-" in a:
         ix = a.index("+-")
-        a = a[:ix] + "-" + a[ix+2:]
+        a = a[:ix] + "-" + a[ix+3:]
+    while "+0" in a:
+        ix = a.index("+0")
+        a = a[:ix] + a[ix + 5:]
     return a
 
 def mult(o):
-    print(o,"mult")
     alphabet = "abcdefghijklmnopqrstuvwxyz"
-    for i in range(0, len(o), 1):
+    try:
+        for i in range(0, len(o), 1):
 
-        n = str(o[i][1])
-        if ("*" in n):
-            n = n.split("*")
-            while (len(n) != 1):
-                if(str(n[0]) in alphabet):
-                    n.append(n[0])
-                    n.remove(n[0])
-                elif(str(n[1]) in alphabet):
-                    o[i][1] = n[1]
+            n = str(o[i][1])
+            if ("*" in n):
+                n = n.split("*")
+                while (len(n) != 1):
+                    if(str(n[0]) in alphabet):
+                        n.append(n[0])
+                        n.remove(n[0])
+                    elif(str(n[1]) in alphabet):
+                        o[i][1] = n[1]
+                        n.remove(n[1])
+                        o[i][2] = float(n[0])
+                        pass
+                    n[0] = float(n[0])*float(n[1])
                     n.remove(n[1])
-                    o[i][2] = int(n[0])
-                    pass
-                n[0] = float(n[0])*float(n[1])
-                n.remove(n[1])
-                o[i][1] = n[0]
-
-    print(o,"o")
+                    o[i][1] = n[0]
+    except TypeError:
+        o=0
+    except ValueError:
+        o=0
     return o
 
 def umst(a,b,w):
-    print(a,b,"x")
     alphabet = "abcdefghijklmnopqrstuvwxyz"
     c = []
     for i in range (0, len(a), 1):
@@ -266,6 +314,9 @@ def umst(a,b,w):
         for i in range(0, len(a), 1):
             if(a[i][0] == "+" and i != e):
                 a[i][0] = "-"
+                f.append(a[i])
+            elif(a[i][0] == "-" and i != e):
+                a[i][0] = "+"
                 f.append(a[i])
         for i in range(0, len(b), 1):
             if(b[i][1] == w):
@@ -289,11 +340,13 @@ def umst(a,b,w):
             if (a[i][0] == "+" and i != e):
                 a[i][0] = "-"
                 f.append(a[i])
+            elif (a[i][0] == "-" and i != e):
+                a[i][0] = "+"
+                f.append(a[i])
         for i in range(0, len(b), 1):
             if (b[i] == w):
                 pass
             f.append(b[i])
-    print(c,"c")
     c = add(c)
     if(c[0][0] == "-"):
         m = c[0][2]*-1
@@ -326,4 +379,6 @@ def umst(a,b,w):
 #glr3 = add(wo[1])
 #print(out(gll3)+"="+out(glr3))
 
-ü("5x*4+5=10x","x")
+#ü("7*x+y=x","x")
+#sy("459.9=-18.8*x-31.4*x+42.4*x+599.7","x")
+#print(10/3)
