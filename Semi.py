@@ -10,10 +10,10 @@ def ü(n,w):
         return "ERROR"
     gll2 = add(gll1)
     glr2 = add(glr1)
-    print(gll2,glr2)
     wo = umst(gll2, glr2, w)
     gll3 = add(wo[0])
     glr3 = add(wo[1])
+    print(glr3)
     print(out(gll3) + "=" + out(glr3))
     return(out(gll3) + "=" + out(glr3))
 
@@ -109,8 +109,10 @@ def vereinf(x):
                 k += 1
             try:
                 u = 1 / float(x[i + 1:k])
-            except ValueError:
+            except IndexError:
+                print("Ie")
                 return 0
+
             x = x[:i] + "*" + str(u) + x[k:]
             i = 0
         i += 1
@@ -162,11 +164,14 @@ def vereinf(x):
                             gl[i].append(q[0][1])
 
                         except TypeError:
+                            print("TE")
                             return 0
+
                     k += 1
                 if(q == 0):
                     q = mult([[0, t]])
                     if (q==0):
+                        print("q0")
                         return 0
                     gl[i][1]=q[0][1]
             else:
@@ -213,6 +218,7 @@ def add(o):
                     elif(search_list[r] == search_list[n] and o[n][0]=="-"):
                         addvalue -= o[n][2]
                 o[r][2] = addvalue
+                o[r][0] = "+"
                 li.append(o[r])
         except TypeError:
             pass
@@ -244,7 +250,7 @@ def out(o):
             cpy = str(o[i][2])
             if (cpy[-2:] == ".0"):
                 cpy = cpy[:-2]
-            a = a + str(o[i][0])+ cpy + str(o[i][1])
+            a = a + str(o[i][0]) + cpy + str(o[i][1])
         elif(str(o[i][1]) in alphabet and o[i][2] == -1):
             a = a + str(o[i][0]) + "-" + str(o[i][1])
         else:
@@ -285,10 +291,10 @@ def mult(o):
                     n[0] = float(n[0])*float(n[1])
                     n.remove(n[1])
                     o[i][1] = n[0]
-    except IndexError:
-        o = 0
+    except TypeError:
+        o=0
     except ValueError:
-        o = 0
+        o=0
     return o
 
 def umst(a,b,w):
@@ -373,6 +379,6 @@ def umst(a,b,w):
 #glr3 = add(wo[1])
 #print(out(gll3)+"="+out(glr3))
 
-ü("2*5+(1/x)+x=y","x")
+#ü("7*x+y=x","x")
 #sy("459.9=-18.8*x-31.4*x+42.4*x+599.7","x")
 #print(10/3)

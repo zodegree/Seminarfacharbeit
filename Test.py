@@ -1,343 +1,260 @@
-def ü(n,w):
-    n = n.split("=")
-    gll = n[0]
-    glr = n[1]
-    gll1 = vereinf(gll)
-    glr1 = vereinf(glr)
-    gll2 = add(gll1)
-    glr2 = add(glr1)
-    wo = umst(gll2, glr2, w)
-    gll3 = add(wo[0])
-    glr3 = add(wo[1])
-    print(out(gll3) + "=" + out(glr3))
-    return(out(gll3) + "=" + out(glr3))
+def GL_ANZ():
+    master = Tk()
+    p = Canvas(master, width=400, height=400)
+    p.grid(row=400, column=200)
+    p.create_line(200, 0, 200, 400)
+    p.create_line(0, 200, 400, 200)
 
-def klm(x,m):
-    # Ablauf der Vereinfachung
-    print(x,"IN")
-    alphabet = "abcdefghijklmnopqrstuvwxyz"
-    x = vereinf(x)
-    for i in range (0, len(x), 1):
+    def bruch(s):
         try:
-            if (x[i][1] in alphabet):
-                x[i][2] *= m
-        except TypeError:
-            x[i][1] *= m
-    x = add(x)
-    x = out(x)
-    if (x[0] != "-"):
-        x = "+"+x
-    print(x, "A")
-    return x
-
-def kl(x):
-    # Ablauf der Vereinfachung
-    print(x,"IN")
-    x = vereinf(x)
-    x = add(x)
-    x = out(x)
-    if (x[0] != "-"):
-        x = "+"+x
-    print(x, "A")
-    return x
-
-def vereinf(x):
-    alphabet = "abcdefghijklmnopqrstuvwxyz"
-    operations = "+-*/"
-    gl = []
-    mlt = "M"
-    i = 0
-    n = len(x)
-    # Klammern werden von innen nach außen aufgelöst und einzeln vereinfacht
-    while i < n:
-        if (x[i] == "("):
-            nc = i
-            if(x[i-1]=="*"):
-                while nc != 0:
-                    nc -= 1
-                    if(x[nc] in operations):
-                        mlt = float(x[nc-1:i-1])
-                        break
-            a = i
-        if (x[i] == ")" and a != 0):
-            if(mlt != "M" and nc == 0):
-                print(nc,"BLYAT")
-                x = klm(x[a + 1:i],mlt) + x[i + 1:]
-            elif(mlt != "M"):
-                x = x[:nc]+klm(x[a + 1:i], mlt) + x[i + 1:]
-            else:
-                x = x[:a]+kl(x[a+1:i])+x[i+1:]
-        elif (x[i] == ")"):
-            x = kl(x[a + 1:i]) + x[i + 1:]
-        i += 1
-        n = len(x)
-#    while "--" in x:
-#        ix = x.index("--")
-#        x = x[:ix] + "+" + x[ix+2:]
-#    while "+-" in x:
-#        ix = x.index("+-")
-#        x = x[:ix] + "-" + x[ix+2:]
-    while "-+" in x:
-        ix = x.index("-+")
-        x = x[:ix] + "-" + x[ix+2:]
-    print(x,"x")
-    # Division wird in Multiplikation umgewandelt
-    while i < n:
-        if (x[i] == "/"):
-            k = i + 1
-            while k < len(x):
-                if (x[k] in operations):
-                    break
-                k += 1
-            print("TEST")
-            u = 1 / float(x[i + 1:k])
-            x = x[:i] + "*" + str(u) + x[k:]
-            i = 0
-        i += 1
-        n = len(x)
-    x = x.split("+")
-    # alle Summanden mit Parametern in eine Liste speichern
-    for i in range(0, len(x), 1):
-        z1 = []
-        z1.append("+")
-        z1.append(x[i])
-        gl.append(z1)
-    # alle Subtrahenten aus der Summanden-Liste suchen, trennen und alles gesplitet in eine neue Liste speichern
-    for i in range(0, len(gl), 1):
-        k = gl[i]
-        k=k[1]
-        if ("-" in k):
-            k = k.split("-")
-            gl[i][1] = k[0]
-            for l in range(1, len(k), 1):
-                z1 = []
-                z1.append("-")
-                z1.append(k[l])
-                gl.append(z1)
-    # alle Elemente der Liste in floats umwandeln, alle anderen prüfen, ob es Variablen sind
-    for i in range(0, len(gl), 1):
-        try:
-            gl[i][1] = float(gl[i][1])
+            t = ''
+            m = ''
+            trigger = ''
+            for i in range(0, len(s), 1):
+                hilf = s[i]
+                if hilf == '/':
+                    trigger = 'aktiv'
+                elif trigger == 'aktiv':
+                    m = m + hilf
+                else:
+                    t = t + hilf
+            ausgabe = int(t) / int(m)
         except ValueError:
-            t = str(gl[i][1]) # string mit Variable
-            if("*" in t):
-                k = 0
-                while k < len(t):
-                    if (t[k] in alphabet):
-                        try:
-                            if(t[k+1] in operations):
-                                t = t[k+2:] + "*" + t[:k+1]
-                                k = len(t)-1
-                        except IndexError:
-                            pass
-                        try:
-                            gl[i][1] = t[k:]
-                            q = mult([[0,t[:k]]])
-                            gl[i].append(q[0][1])
-                        except IndexError:
-                            gl[i][1] = t[k:]
-                            q = mult([[0, t[:k]+"1"]])
-                            gl[i].append(q[0][1])
-                    k += 1
-                q = mult([[0, t]])
-                gl[i][1]=q[0][1]
-                print(gl[i],"q")
-            else:
-                for k in range(0, len(t), 1):
-                    if(t[k] in alphabet and k!=0):
-                        gl[i].append(float(t[:k]))
-                        gl[i][1]=t[k:]
-                        pass
-                    elif(t[k] in alphabet):
-                        gl[i].append(int(1))
-    for i in range(0, len(gl), 1):
-        try:
-            if("" in gl[i]):
-                gl.remove(gl[i])
-        except IndexError:
-            pass
-    return gl
+            ausgabe = float(s)
+        return ausgabe
 
-def add(o):
-    alphabet = "abcdefghijklmnopqrstuvwxyz"
-    k = 0
-    li = []
-    search_list = []
-    twiceattemp = []
-    f = 0
-    for i in range(0, len(o), 1):
-        search_list.append(o[i][1])
-        if ("." in str(o[i][1])):
-            ind = str(o[i][1]).index(".")
-            fn = len(str(o[i][1])[ind+1:])
-            if (fn > f):
-                f = fn
-    for i in range(0, len(o), 1):
-        if (f != 0 and str(o[i][1]) not in alphabet):
-            o[i][1] *= (10**f)
-    print(o,search_list,"sl")
-    for r in range (0, len(search_list), 1):
-        addvalue = 0
-        try:
-            if(search_list[r] in alphabet and search_list[r] not in twiceattemp):
-                twiceattemp.append(search_list[r])
-                for n in range(0, len(search_list), 1):
-                    if(search_list[r] == search_list[n]):
-                        addvalue += o[n][2]
-                o[r][2] = addvalue
-                li.append(o[r])
-        except TypeError:
-            pass
+    print('y=cx^2+bx+a')
+    c = bruch(input('c='))  # n
+    b = bruch(input('b='))  # x
+    a = bruch(input('a='))  # x^2
 
+    if c == 0:  # linear
+        d = abs(b)
 
-    for i in range(0, len(o), 1):
-        try:
-            if("+" == o[i][0]):
-                k += float(o[i][1])
-            elif("-" == o[i][0]):
-                k -= float(o[i][1])
-        except ValueError:
-            pass
-    if (k != 0):
-        if (f != 0):
-            k /= (10**f)
-        s = ["+",k]
-        li.append(s)
-    else:
-        s = ["+",k]
-        li.append(s)
-
-    return li
-
-def out(o):
-    alphabet = "abcdefghijklmnopqrstuvwxyz"
-    a = ""
-    for i in range(0, len(o), 1):
-        if (str(o[i][1]) in alphabet and o[i][2] != 1):
-            a = a + str(o[i][0]) + str(o[i][2]) + str(o[i][1])
-        elif(str(o[i][1]) in alphabet and o[i][2] == -1):
-            a = a + str(o[i][0]) + "-" + str(o[i][1])
+        if d < 1 / 10000:
+            print('Das ist zu niedrig')
+        elif d >= 1 / 10000 and d <= 1 / 1000:
+            lx = 1 / 100
+            ly = d / (lx)
+        elif d > 1 / 1000 and d < 1 / 100:
+            lx = 1 / 10
+            ly = d / (lx)
+        elif d >= 1 / 100 and d < 33:
+            lx = 1
+            ly = d
+        elif d >= 33 and d < 3333:
+            lx = 10
+            ly = d / (lx)
+        elif d >= 3333 and d <= 33333:
+            lx = 100
+            ly = round(d / (lx))
         else:
-            a = a + str(o[i][0]) + str(o[i][1])
-        if(i==0 and a[0]=="+"):
-            a = a[1:]
-    while "--" in a:
-        ix = a.index("--")
-        a = a[:ix] + "+" + a[ix+2:]
-    while "+-" in a:
-        ix = a.index("+-")
-        a = a[:ix] + "-" + a[ix+2:]
-    while "+0.0" in a:
-        ix = a.index("+0.0")
-        a = a[:ix] + a[ix + 4:]
-    return a
+            print('Das ist zu hoch')
 
-def mult(o):
-    print(o,"mult")
-    alphabet = "abcdefghijklmnopqrstuvwxyz"
-    for i in range(0, len(o), 1):
+        # Beschriftung:
+        for i in range(200, 410, 10):  # x-Achse(rechts)
+            p.create_line(i, 200, i, 205)
+        for i in range(200, -20, -10):  # x-Achse(links)
+            p.create_line(i, 200, i, 205)
+        for i in range(200, 410, 10):  # y-Achse(unten)
+            p.create_line(200, i, 195, i)
+        for i in range(200, -20, -10):  # y-Achse(oben)
+            p.create_line(200, i, 195, i)
+        # große Markierungen
+        for i in range(200, 450, 50):
+            p.create_line(i, 200, i, 210)
+        for i in range(200, -100, -50):
+            p.create_line(i, 200, i, 210)
+        for i in range(200, 450, 50):
+            p.create_line(200, i, 190, i)
+        for i in range(200, -100, -50):
+            p.create_line(200, i, 190, i)
 
-        n = str(o[i][1])
-        if ("*" in n):
-            n = n.split("*")
-            while (len(n) != 1):
-                if(str(n[0]) in alphabet):
-                    n.append(n[0])
-                    n.remove(n[0])
-                elif(str(n[1]) in alphabet):
-                    o[i][1] = n[1]
-                    n.remove(n[1])
-                    o[i][2] = int(n[0])
-                    pass
-                n[0] = float(n[0])*float(n[1])
-                n.remove(n[1])
-                o[i][1] = n[0]
-
-    print(o,"o")
-    return o
-
-def umst(a,b,w):
-    print(a,b,"x")
-    alphabet = "abcdefghijklmnopqrstuvwxyz"
-    c = []
-    for i in range (0, len(a), 1):
-        c.append(a[i][1])
-    d = []
-    for i in range (0, len(b), 1):
-        d.append(b[i][1])
-    f = []
-    try:
-        e = c.index(w)
-        c = []
-        c.append(a[e])
-        f = []
-        for i in range(0, len(a), 1):
-            if(a[i][0] == "+" and i != e):
-                a[i][0] = "-"
-                f.append(a[i])
-            if(a[i][0] == "-" and i != e):
-                a[i][0] = "+"
-                f.append(a[i])
-        for i in range(0, len(b), 1):
-            if(b[i][1] == w):
-                cs = b[i]
-                cs[2] = cs[2]*-1
-                c.append(cs)
+        skalierung = input('Geben sie ein, ob die Skalierung automatisch(1) oder manuell(2) erfolgen soll: ')
+        if skalierung != '1' and skalierung != '2':
+            print('ENTWEDER 1 ODER 2 SCHREIBEN!!! SO SCHWER IST DAS NICHT!!!')
+            pm = 0
+            ln = 0
+        elif skalierung == '1':
+            e = abs(a)
+            if e > 30 * d:
+                print('a darf höchstens 30 mal so groß, wie b sein, um eine optimale Skallierung zu erreichen')
+            elif e == 0:
+                lx = lx
+                ly = ly
+                ln = 0
+            elif e == d:
+                lx = lx
+                ly = ly
+                if a >= 0:
+                    ln = 50
+                else:
+                    ln = -50
+            elif e > d and e <= 30 * d:
+                lx = lx / 10
+                ly = 10 * ly
+                if a >= 0:
+                    ln = 50 // ((10 * d) / e)
+                else:
+                    ln = -(50 // ((10 * d) / e))
+            elif e < d and e > d / 10:
+                lx = lx
+                ly = ly
+                if a >= 0:
+                    ln = 50 // (d / e)
+                else:
+                    ln = -(50 // (d / e))
             else:
-                f.append(b[i])
-    except ValueError:
-        zw = a
-        a = b
-        b = zw
-        zw = c
-        c = d
-        d = zw
-        e = c.index(w)
-        c = []
-        c.append(a[e])
-        f = []
-        for i in range(0, len(a), 1):
-            if (a[i][0] == "+" and i != e):
-                a[i][0] = "-"
-                f.append(a[i])
-            if (a[i][0] == "-" and i != e):
-                a[i][0] = "+"
-                f.append(a[i])
-        for i in range(0, len(b), 1):
-            if (b[i] == w):
-                pass
-            f.append(b[i])
-    print(c,"c")
-    c = add(c)
-    if(c[0][0] == "-"):
-        m = c[0][2]*-1
+                print('a muss min. 1/10 von b betragen, um eine optimale Skallierung zu erreichen')
+
+            for i in range(5, 20, 5):
+                try:
+                    hilfx = (i / 5) / lx
+                    if abs(hilfx) >= 1:
+                        hilfx = int(hilfx)
+                    else:
+                        hilfx = round(hilfx, 2)
+                    hilfy = (i / 5) * ly
+                except NameError:
+                    hilfx = 0
+                    hilfy = 0
+                    print('Kein x vorhanden')
+                # print(round(hilfe+0.01))
+                # hilfe=int(hilfe)
+                # print(hilfe)
+                p.create_text(200 + 10 * i, 215, text=abs(hilfx))  # text(breite,höhe,text='text')  #rechts
+                p.create_text(200 - 10 * i, 215, text=-abs(hilfx))  # links
+                p.create_text(180, 200 - 10 * i, text=round(abs(hilfy), 2))  # oben
+                p.create_text(178, 200 + 10 * i, text=round(-abs(hilfy), 2))  # unten
+                if b >= 0:
+                    pm = 1
+                else:
+                    pm = -1
+
+        else:
+            bx = int(input('Geben sie das maximale x im intervall an (positiv und ganzzahlig): '))
+            by = int(input('Geben sie das maximale y im intervall an (positiv und ganzzahlig): '))
+            for i in range(5, 20, 5):
+                hilfx = (i / 5) * (bx / 4)
+                hilfy = (i / 5) * (by / 4)
+                p.create_text(200 + 10 * i, 215, text=round(abs(hilfx), 2))  # text(breite,höhe,text='text')  #rechts
+                p.create_text(200 - 10 * i, 215, text=round(-abs(hilfx), 2))  # links
+                p.create_text(180, 200 - 10 * i, text=round(abs(hilfy), 2))  # oben
+                p.create_text(178, 200 + 10 * i, text=round(-abs(hilfy), 2))  # unten
+            pm = (bx / by) * b
+            ln = a / ((by / 4) / 50)
+
+        if round(a + b) == a + b:
+            for x in range(-2000, 2001, 1):
+                e = ((x - 1) + 200)
+                f = 400 - ((x - 1) * pm + 200) - ln
+                g = (x + 200)
+                h = 400 - (x * pm + 200) - ln
+                p.create_line(e, f, g, h, fill='red')
+
+        elif round(a + b, 1) == a + b:
+            for x in range(-2000, 2001, 1):
+                e = (((x - 1) + 200))
+                f = (400 - ((x - 1) * pm + 200) - ln)
+                g = ((x + 200))
+                h = (400 - (x + 200) * pm - ln)
+                p.create_line(e, f, g, h, fill='yellow')
+        else:
+            for x in range(-2000, 2001, 1):
+                e = round((((x - 1) + 200)), 2)
+                f = round((400 - ((x - 1) * pm + 200) - ln), 2)
+                g = round(((x + 200)), 2)
+                h = round((400 - (x * pm + 200) - ln), 2)
+                p.create_line(e, f, g, h, fill='blue')
+
     else:
-        m = c[0][2]
-    for i in range (0, len(f), 1):
-        try:
-            if(f[i][1] in alphabet):
-                f[i][2] = f[i][2]/m
-        except:
-            f[i][1] = f[i][1]/m
-    c[0][2] = 1
-    return (c, f)
+        mc = c / 10
+        d = abs(c)
+        e = abs(b)
+        f = abs(a)
+        # Beschriftung:
+        for i in range(200, 410, 10):  # x-Achse(rechts)
+            p.create_line(i, 200, i, 205)
+        for i in range(200, -20, -10):  # x-Achse(links)
+            p.create_line(i, 200, i, 205)
+        for i in range(200, 410, 10):  # y-Achse(unten)
+            p.create_line(200, i, 195, i)
+        for i in range(200, -20, -10):  # y-Achse(oben)
+            p.create_line(200, i, 195, i)
+        # große Markierungen
+        for i in range(200, 450, 50):
+            p.create_line(i, 200, i, 210)
+        for i in range(200, -100, -50):
+            p.create_line(i, 200, i, 210)
+        for i in range(200, 450, 50):
+            p.create_line(200, i, 190, i)
+        for i in range(200, -100, -50):
+            p.create_line(200, i, 190, i)
+        skalierung = input('Geben sie ein, ob die Skalierung automatisch(1) oder manuell(2) erfolgen soll: ')
+        if skalierung != '1' and skalierung != '2':
+            print('ENTWEDER 1 ODER 2 SCHREIBEN!!! SO SCHWER IST DAS NICHT!!!')
+            pm = 0
+            ln = 0
+        elif skalierung == '1':
+            hil = 1
+            if d >= 1000:
+                print('Das ist zu hoch! Nicht optimale Skalierung möglich')
+            elif d >= 100:
+                qx = 1 / 100
+                qy = 1 / 100
+                mc = mc / 100
+            elif d < 100 and d >= 10:
+                qx = 1 / 10
+                qy = 1 / 10
+                mc = mc / 10
+            elif d < 10 and d >= 1 / 10:
+                qx = 1
+                qy = 1
+                mc = mc
+            elif d < 1 / 10 and d >= 1 / 100:
+                qx = 10
+                qy = 10
+                mc = 10 * mc
+            elif d <= 1 / 1000:
+                print('Das ist zu niedrig! Keine optimale Skalierung möglich')
+            else:
+                qx = 100
+                qy = 100
+                mc = 100 * mc
+            for x in range(-200, 201, 1):
+                # print(x*x,'x^2')
+                e = ((x - 1) + 200)
+                f = 400 - (mc * (x - 1) * (x - 1) + b * (x - 1) / qx + 200) - a * 10 / qx
+                g = (x + 200)
+                h = 400 - (mc * x * x + b * x / qx + 200) - a * 10 / qx
+                # print(e,f,g,h)
+                p.create_line(e, f, g, h, fill='red')
 
+        else:
+            bx = int(input('Geben sie das maximale x im intervall an (positiv und ganzzahlig): '))
+            by = int(input('Geben sie das maximale y im intervall an (positiv und ganzzahlig): '))
+            qx = bx / 4 / 5
+            qy = by / 4 / 5
+            mc = c / 10
+            hil = bx / by
+            if c == 1:
+                hil = 2
+            else:
+                hil = hil
+            for x in range(-200, 201, 1):
+                # print(x*x,'x^2')
+                e = ((50 / (bx / 4)) * (x - 1) + 200)
+                f = 400 - (c * (50 / (by / 4)) * (x - 1) * (x - 1) + b * (50 / (by / 4)) * (x - 1) + 200) - a * (
+                200 / by)
+                g = ((50 / (bx / 4)) * x + 200)
+                h = 400 - (c * (50 / (by / 4)) * x * x + b * (50 / (by / 4)) * x + 200) - a * (200 / by)
+                # print(e,f,g,h)
+                p.create_line(e, f, g, h, fill='red')
 
+        for i in range(5, 20, 5):
+            p.create_text(200 + 10 * i, 215, text=i * qx)
+            p.create_text(200 - 10 * i, 215, text=-i * qx)
+            p.create_text(175, 200 - 10 * i, text=i * qy)
+            p.create_text(175, 200 + 10 * i, text=-i * qy)
 
-
-n = "3x-y=5"
-w = "x"
-n = n.split("=")
-gll = n[0]
-glr = n[1]
-glr1 = vereinf(glr)
-gll1 = vereinf(gll)
-glr11 = mult(glr1)
-gll11 = mult(gll1)
-glr2 = add(glr11)
-gll2 = add(gll11)
-print(gll2,glr2)
-wo = umst(gll2,glr2,w)
-gll3 = add(wo[0])
-glr3 = add(wo[1])
-print(out(gll3)+"="+out(glr3))
+    master.mainloop()
