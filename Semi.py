@@ -1,56 +1,70 @@
-import time
 from sympy import *
-def ü(n,w):
+
+def ü(n,w):                             # Berechnungs Funktion, welche Eingabe erhält und verarbeitet, sowie wieder zurückgibt
+                                        # Aufspalten der Gleichung in ein Array,
+                                        # danach Übergabe beider Teile in jeweilige Variablen
     n = n.split("=")
     gll = n[0]
     glr = n[1]
+                                        # Terme werden mit der Funktion vereinf() in ein ,
+                                        # für das Programm verständliches Array, umgewandelt
     gll1 = vereinf(gll)
     glr1 = vereinf(glr)
-    if(gll1 == 0 or glr1 == 0):
+    if(gll1 == 0 or glr1 == 0):         # Wenn Gleichung nicht verarbeitet werden kann, so ist Rückgabewert ERROR
         return "ERROR"
+                                        # Vereinfachen der Terme
     gll2 = add(gll1)
     glr2 = add(glr1)
-    wo = umst(gll2, glr2, w)
+    wo = umst(gll2, glr2, w)            # die Terme werden wieder zusammenbearbeitet, um sie umzustellen
+                                        # Erneutes Vereinfachen der Terme
     gll3 = add(wo[0])
     glr3 = add(wo[1])
-    print(glr3)
-    print(out(gll3) + "=" + out(glr3))
-    return(out(gll3) + "=" + out(glr3))
 
-def sy(n,w):
-    n = n.split("=")
+    print(out(gll3) + "=" + out(glr3))
+    return(out(gll3) + "=" + out(glr3)) # Rückgabe eines Strings, welcher für den User verständlich ist
+
+def sy(n,w):                            # dies ist eine Vergleichsfunktion, welche das Paket sympy benutzt,
+                                        # sowie die Korrektheit der Berechnung sichern soll
+
+    n = n.split("=")                    # Aufspaltung der Gleichung in ein Array
+                                        # Umwandeln der Terme von Strings in ein von sympy lesbares Format
     eq_1 = sympify(n[0])
     eq_2 = sympify(n[1])
-    eq = Eq(eq_1,eq_2)
-    result = str(solveset(eq,w))
-    result = result[1:-1]
-    result = w+"="+result
-    print(result)
+
+    eq = Eq(eq_1,eq_2)                  # Aufstellen einer für sympy lesbaren Gleichung
+    result = str(solveset(eq,w))        # Lösen der Gleichung mit solveset
+    result = result[1:-1]               # Löschen der Geschweiften Klammern
+    result = w+"="+result               # Ausgabeform bilden
     return result
 
-def klm(x,m):
-    # Ablauf der Vereinfachung
+def klm(x,m):                           # Auflösen von Klammern, welche einen Multiplikator m,
+                                        # sowie eine Variable besitzt
     alphabet = "abcdefghijklmnopqrstuvwxyz"
-    x = vereinf(x)
+    x = vereinf(x)                      # Term mit der Funktion vereinf() in ein ,
+                                        # für das Programm verständliches Array, umgewandelt
+    if (x == 0):                        # Wenn Gleichung nicht verarbeitet werden kann, so ist Rückgabewert ERROR
+        return "ERROR"
     for i in range (0, len(x), 1):
         try:
             if (x[i][1] in alphabet):
-                x[i][2] *= m
+                x[i][2] *= m            # Faktor der Variable wird mit Multiplikator m multipliziert
         except TypeError:
-            x[i][1] *= m
-    x = add(x)
-    x = out(x)
+            x[i][1] *= m                # Zahlen der Klammer werden mit dem Multiplikator m multipliziert
+    x = add(x)                          # Term wird mit der add() Funktion vereinfacht
+    x = out(x)                          # Term wird nun wieder zu String, damit Funktion vereinf()
+                                        # Klammer verarbeiten kann
     if (x[0] != "-"):
         x = "+"+x
     return x
 
-def kl(x):
-    # Ablauf der Vereinfachung
-    x = vereinf(x)
-    if(x==0):
+def kl(x):                              # Auflösen von Klammern
+    x = vereinf(x)                      # Term mit der Funktion vereinf() in ein ,
+                                        # für das Programm verständliches Array, umgewandelt
+    if(x==0):                           # Wenn Gleichung nicht verarbeitet werden kann, so ist Rückgabewert ERROR
         return "ERROR"
-    x = add(x)
-    x = out(x)
+    x = add(x)                          # Term wird mit der add() Funktion vereinfacht
+    x = out(x)                          # Term wird nun wieder zu String, damit Funktion vereinf()
+                                        # Klammer verarbeiten kann
     if (x[0] != "-"):
         x = "+"+x
     return x
@@ -62,9 +76,9 @@ def vereinf(x):
     mlt = "M"
     i = 0
     n = len(x)
-    # Klammern werden von innen nach außen aufgelöst und einzeln vereinfacht
+                                        # Klammern werden von innen nach außen aufgelöst und einzeln vereinfacht
     while i < n:
-        if (x[i] == "("):
+        if (x[i] == "("):               # Herausfinden eines Faktores, wenn er vor der Klammer steht
             nc = i-1
             if(x[i-1]=="*"):
                 while nc != -1:
@@ -76,7 +90,8 @@ def vereinf(x):
                         mlt = float(x[:i - 1])
                         break
             a = i
-        if (x[i] == ")" and a != 0):
+        if (x[i] == ")" and a != 0):    # Übergeben der Klammern in die jeweiligen Funktionen,
+                                        # sowie erstellen neuer Terme ohne Klammern
             if(mlt != "M" and nc == 0):
                 x = klm(x[a + 1:i],mlt) + x[i + 1:]
                 mlt = "M"
@@ -110,7 +125,6 @@ def vereinf(x):
             try:
                 u = 1 / float(x[i + 1:k])
             except IndexError:
-                print("Ie")
                 return 0
 
             x = x[:i] + "*" + str(u) + x[k:]
@@ -164,14 +178,12 @@ def vereinf(x):
                             gl[i].append(q[0][1])
 
                         except TypeError:
-                            print("TE")
                             return 0
 
                     k += 1
                 if(q == 0):
                     q = mult([[0, t]])
                     if (q==0):
-                        print("q0")
                         return 0
                     gl[i][1]=q[0][1]
             else:
@@ -378,7 +390,6 @@ def umst(a,b,w):
 #gll3 = add(wo[0])
 #glr3 = add(wo[1])
 #print(out(gll3)+"="+out(glr3))
-
-#ü("7*x+y=x","x")
+ü("7*x+y=x","x")
 #sy("459.9=-18.8*x-31.4*x+42.4*x+599.7","x")
 #print(10/3)
