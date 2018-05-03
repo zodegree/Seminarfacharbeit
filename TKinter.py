@@ -70,8 +70,11 @@ def GL_UMST():
         popup.destroy()
 
     def GL_PRINT(n,w):
-        L = Label(nframe, text=Semi.ü(n,w)).grid(row=2,column=1)
-        if (Semi.ü(n, w) != Semi.sy(n, w)):
+        if (Semi.ü(n, w) == "ERROR"):
+            L = Label(nframe, text=Semi.sy(n,w)).grid(row=2,column=1)
+
+
+        elif (Semi.ü(n, w) != Semi.sy(n, w)):
             popup = Tk()
             L1 = Label(popup, text="Beim Lösen der Gleichung ist möglicherweise Fehler aufgetreten.\nBitte vergleichen sie mit der angezeigten Lösung.")
             L1.pack(side="top")
@@ -80,6 +83,8 @@ def GL_UMST():
             B = Button(popup, text="Fenster schließen", command= lambda: GL_RS(popup,n,w))
             B.pack(side="top")
             popup.mainloop()
+        else:
+            L = Label(nframe, text=Semi.sy(n, w)).grid(row=2, column=1)
 
     nframe=Tk()
     T = Label(nframe, text="Geben sie die zu lösende Gleichung ein:")

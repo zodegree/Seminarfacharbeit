@@ -6,6 +6,8 @@ def ü(n,w):
     glr = n[1]
     gll1 = vereinf(gll)
     glr1 = vereinf(glr)
+    if(gll1 == 0 or glr1 == 0):
+        return "ERROR"
     gll2 = add(gll1)
     glr2 = add(glr1)
     print(gll2,glr2)
@@ -45,6 +47,8 @@ def klm(x,m):
 def kl(x):
     # Ablauf der Vereinfachung
     x = vereinf(x)
+    if(x==0):
+        return "ERROR"
     x = add(x)
     x = out(x)
     if (x[0] != "-"):
@@ -103,7 +107,10 @@ def vereinf(x):
                 if (x[k] in operations):
                     break
                 k += 1
-            u = 1 / float(x[i + 1:k])
+            try:
+                u = 1 / float(x[i + 1:k])
+            except ValueError:
+                return 0
             x = x[:i] + "*" + str(u) + x[k:]
             i = 0
         i += 1
@@ -153,9 +160,14 @@ def vereinf(x):
                             gl[i][1] = t[k:]
                             q = mult([[0, t[:k]+"1"]])
                             gl[i].append(q[0][1])
+
+                        except TypeError:
+                            return 0
                     k += 1
                 if(q == 0):
                     q = mult([[0, t]])
+                    if (q==0):
+                        return 0
                     gl[i][1]=q[0][1]
             else:
                 for k in range(0, len(t), 1):
@@ -255,23 +267,28 @@ def out(o):
 
 def mult(o):
     alphabet = "abcdefghijklmnopqrstuvwxyz"
-    for i in range(0, len(o), 1):
+    try:
+        for i in range(0, len(o), 1):
 
-        n = str(o[i][1])
-        if ("*" in n):
-            n = n.split("*")
-            while (len(n) != 1):
-                if(str(n[0]) in alphabet):
-                    n.append(n[0])
-                    n.remove(n[0])
-                elif(str(n[1]) in alphabet):
-                    o[i][1] = n[1]
+            n = str(o[i][1])
+            if ("*" in n):
+                n = n.split("*")
+                while (len(n) != 1):
+                    if(str(n[0]) in alphabet):
+                        n.append(n[0])
+                        n.remove(n[0])
+                    elif(str(n[1]) in alphabet):
+                        o[i][1] = n[1]
+                        n.remove(n[1])
+                        o[i][2] = float(n[0])
+                        pass
+                    n[0] = float(n[0])*float(n[1])
                     n.remove(n[1])
-                    o[i][2] = float(n[0])
-                    pass
-                n[0] = float(n[0])*float(n[1])
-                n.remove(n[1])
-                o[i][1] = n[0]
+                    o[i][1] = n[0]
+    except IndexError:
+        o = 0
+    except ValueError:
+        o = 0
     return o
 
 def umst(a,b,w):
@@ -356,6 +373,6 @@ def umst(a,b,w):
 #glr3 = add(wo[1])
 #print(out(gll3)+"="+out(glr3))
 
-ü("459.9=-18.8*x-31.4*x+42.4*x+599.7","x")
+ü("2*5+(1/x)+x=y","x")
 #sy("459.9=-18.8*x-31.4*x+42.4*x+599.7","x")
 #print(10/3)
