@@ -8,6 +8,7 @@ def ü(n,w):
     glr1 = vereinf(glr)
     gll2 = add(gll1)
     glr2 = add(glr1)
+    print(gll2,glr2)
     wo = umst(gll2, glr2, w)
     gll3 = add(wo[0])
     glr3 = add(wo[1])
@@ -94,10 +95,8 @@ def vereinf(x):
         ix = x.index("-+")
         x = x[:ix] + "-" + x[ix+2:]
     # Division wird in Multiplikation umgewandelt
-    print("TEST")
     i = 0
     while i < n:
-        print(x[i],i)
         if (x[i] == "/"):
             k = i + 1
             while k < len(x):
@@ -197,8 +196,10 @@ def add(o):
             if(search_list[r] in alphabet and search_list[r] not in twiceattemp):
                 twiceattemp.append(search_list[r])
                 for n in range(0, len(search_list), 1):
-                    if(search_list[r] == search_list[n]):
+                    if(search_list[r] == search_list[n] and o[n][0]=="+"):
                         addvalue += o[n][2]
+                    elif(search_list[r] == search_list[n] and o[n][0]=="-"):
+                        addvalue -= o[n][2]
                 o[r][2] = addvalue
                 li.append(o[r])
         except TypeError:
@@ -228,7 +229,10 @@ def out(o):
     a = ""
     for i in range(0, len(o), 1):
         if (str(o[i][1]) in alphabet and o[i][2] != 1):
-            a = a + str(o[i][0]) + str(o[i][2]) + str(o[i][1])
+            cpy = str(o[i][2])
+            if (cpy[-2:] == ".0"):
+                cpy = cpy[:-2]
+            a = a + str(o[i][0])+ cpy + str(o[i][1])
         elif(str(o[i][1]) in alphabet and o[i][2] == -1):
             a = a + str(o[i][0]) + "-" + str(o[i][1])
         else:
@@ -240,13 +244,13 @@ def out(o):
             a = a[1:]
     while "--" in a:
         ix = a.index("--")
-        a = a[:ix] + "+" + a[ix+2:]
+        a = a[:ix] + "+" + a[ix+3:]
     while "+-" in a:
         ix = a.index("+-")
-        a = a[:ix] + "-" + a[ix+2:]
+        a = a[:ix] + "-" + a[ix+3:]
     while "+0" in a:
         ix = a.index("+0")
-        a = a[:ix] + a[ix + 4:]
+        a = a[:ix] + a[ix + 5:]
     return a
 
 def mult(o):
@@ -263,7 +267,7 @@ def mult(o):
                 elif(str(n[1]) in alphabet):
                     o[i][1] = n[1]
                     n.remove(n[1])
-                    o[i][2] = int(n[0])
+                    o[i][2] = float(n[0])
                     pass
                 n[0] = float(n[0])*float(n[1])
                 n.remove(n[1])
@@ -352,6 +356,6 @@ def umst(a,b,w):
 #glr3 = add(wo[1])
 #print(out(gll3)+"="+out(glr3))
 
-#ü("x+5/6*8=10","x")
-sy("x+5/6*8=10","x")
-print(10/3)
+ü("459.9=-18.8*x-31.4*x+42.4*x+599.7","x")
+#sy("459.9=-18.8*x-31.4*x+42.4*x+599.7","x")
+#print(10/3)

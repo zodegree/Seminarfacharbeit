@@ -68,16 +68,16 @@ def Lernprogramm():
 def GL_UMST():
     def GL_RS(popup,n,w):
         popup.destroy()
-        L = Label(nframe, text=Semi.sy(n, w))
-        L.grid(row=2, column=1)
 
     def GL_PRINT(n,w):
         L = Label(nframe, text=Semi.ü(n,w)).grid(row=2,column=1)
         if (Semi.ü(n, w) != Semi.sy(n, w)):
             popup = Tk()
-            L1 = Label(popup, text="Beim Lösen der Gleichung ist ein Fehler aufgetreten.\nBitte drücken sie auf Ok um die \n richtige Lösung angezeigt zu bekommen.")
+            L1 = Label(popup, text="Beim Lösen der Gleichung ist möglicherweise Fehler aufgetreten.\nBitte vergleichen sie mit der angezeigten Lösung.")
             L1.pack(side="top")
-            B = Button(popup, text="Ok", command= lambda: GL_RS(popup,n,w))
+            L2 = Label(popup, text=Semi.sy(n, w))
+            L2.pack(side="top")
+            B = Button(popup, text="Fenster schließen", command= lambda: GL_RS(popup,n,w))
             B.pack(side="top")
             popup.mainloop()
 
