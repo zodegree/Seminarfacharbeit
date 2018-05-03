@@ -17,6 +17,7 @@ import random
 #    return(n1,n2)
 def GL_ANZ():
     nframe = Tk()
+    nframe.title("Gleichungen graphisch anzeigen")
     def Scal():
         c = IN1.get()
         b = IN2.get()
@@ -52,6 +53,7 @@ def GL_ANZ():
 
         def GL_ANZF(a, b, c, bx, by, skalierung):
             master = Tk()
+            master.title("Graphische Ausgabe")
             p = Canvas(master, width=400, height=400)
             p.grid(row=400, column=200)
             p.create_line(200, 0, 200, 400)  # erstellen der x- und y- Achse
@@ -90,6 +92,7 @@ def GL_ANZ():
                 if d < 1 / 10000:  # autoskalierung linear
                     master.destroy()
                     popup = Tk()
+                    popup.title("WARNUNG")
                     L = Label(popup, text='b ist zu niedrig').pack(side="top")
                     B = Button(popup, text='Ok', command=lambda: popup.destroy()).pack(side="top")
                     popup.mainloop()
@@ -112,6 +115,7 @@ def GL_ANZ():
                 else:
                     master.destroy()
                     popup = Tk()
+                    popup.title("WARNUNG")
                     L = Label(popup, text='b ist zu hoch').pack(side="top")
                     B = Button(popup, text='Ok', command=lambda: popup.destroy()).pack(side="top")
                     popup.mainloop()
@@ -146,6 +150,7 @@ def GL_ANZ():
                     if e > 30 * d:  # autoskalierung des
                         master.destroy()
                         popup = Tk()
+                        popup.title("WARNUNG")
                         L = Label(popup,
                                   text='a darf höchstens 30 mal so groß, wie b sein, um eine optimale Skallierung zu erreichen').pack(
                             side="top")
@@ -180,6 +185,7 @@ def GL_ANZ():
                     else:
                         master.destroy()
                         popup = Tk()
+                        popup.title("WARNUNG")
                         L = Label(popup,
                                   text='a muss min. 1/10 von b betragen, um eine optimale Skallierung zu erreichen').pack(
                             side="top")
@@ -201,6 +207,7 @@ def GL_ANZ():
                             # print('Kein x vorhanden')
                             master.destroy()
                             popup = Tk()
+                            popup.title("WARNUNG")
                             L = Label(popup, text='Kein x vorhanden').pack(side="top")
                             B = Button(popup, text='Ok', command=lambda: popup.destroy()).pack(side="top")
                             popup.mainloop()
@@ -287,6 +294,7 @@ def GL_ANZ():
                         # print('Das ist zu hoch! Nicht optimale Skalierung möglich')
                         master.destroy()
                         popup = Tk()
+                        popup.title("WARNUNG")
                         L = Label(popup, text='Das ist zu hoch! Nicht optimale Skalierung möglich').pack(side="top")
                         B = Button(popup, text='Ok', command=lambda: popup.destroy()).pack(side="top")
                         popup.mainloop()
@@ -310,6 +318,7 @@ def GL_ANZ():
                         # print('Das ist zu niedrig! Keine optimale Skalierung möglich')
                         master.destroy()
                         popup = Tk()
+                        popup.title("WARNUNG")
                         L = Label(popup, text='Das ist zu niedrig! Keine optimale Skalierung möglich').pack(side="top")
                         B = Button(popup, text='Ok', command=lambda: popup.destroy()).pack(side="top")
                         popup.mainloop()
@@ -370,6 +379,7 @@ def GL_ANZ():
 
 def Lernprogramm():
     nframe=Tk()
+    nframe.title("Lernprogramm")
     def GL_VGL(iget):
         outpr = Semi.ü(out, "x")
         outpr = outpr.split("=")
@@ -432,6 +442,7 @@ def GL_UMST():
         elif (Semi.ü(n, w) != Semi.sy(n, w)):
             L = Label(nframe, text=Semi.ü(n, w),bg="white").grid(row=3, column=1,sticky=W+E)
             popup = Tk()
+            popup.title("WARNUNG")
             L1 = Label(popup, text="Beim Lösen der Gleichung ist möglicherweise Fehler aufgetreten.\nBitte vergleichen sie mit der angezeigten Lösung.")
             L1.pack(side="top")
             L2 = Label(popup, text=Semi.sy(n, w))
@@ -443,6 +454,7 @@ def GL_UMST():
             L = Label(nframe, text=Semi.ü(n, w),bg="white").grid(row=3, column=1,sticky=W+E)
 
     nframe=Tk()
+    nframe.title("Gleichung umstellen")
     HIN = Label(nframe, text="Beachten sie: 2x muss als 2*x eingegeben werden").grid(row=0)
     T = Label(nframe, text="Geben sie die zu lösende Gleichung ein:")
     T.grid(row=1,column=0)
@@ -459,6 +471,7 @@ def GL_UMST():
 def GL_SYS():
     #alphabet = "abcdefghijklmnopqrstuvwxyz"
     nframe = Tk()
+    nframe.title("Gleichungssysteme berechnen")
     n = []
 
     #def GL_RES():
@@ -530,12 +543,12 @@ y = (hs/2) - (h/2)
 mainframe.geometry('%dx%d+%d+%d' % (w, h, x, y))
 
 b1 = Button(mainframe, text="Gleichung umstellen", command=GL_UMST)
-b1.place(relx=0.5, rely=0.4, anchor=CENTER)
+b1.place(relx=0.5, rely=0.35, anchor=CENTER)
 b2 = Button(mainframe, text="Lernprogramm starten", command=Lernprogramm)
-b2.place(relx=0.5, rely=0.5, anchor=CENTER)
+b2.place(relx=0.5, rely=0.45, anchor=CENTER)
 b3 = Button(mainframe, text="Gleichungssysteme berechnen", command=GL_SYS)
-b3.place(relx=0.5, rely=0.6, anchor=CENTER)
+b3.place(relx=0.5, rely=0.55, anchor=CENTER)
 b4 = Button(mainframe, text="Gleichungen graphisch anzeigen", command=GL_ANZ)
-b4.place(relx=0.5, rely=0.7, anchor=CENTER)
+b4.place(relx=0.5, rely=0.65, anchor=CENTER)
 
 mainframe.mainloop() # starts the mainloop

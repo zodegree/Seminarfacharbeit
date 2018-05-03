@@ -346,18 +346,21 @@ def mult(o):
 def umst(a,b,w):
     alphabet = "abcdefghijklmnopqrstuvwxyz"
     c = []
+                                        # Speichern von jeder Variable/Zahl ohne Faktoren
+                                        # und oder Vorzeichen in eine Liste
     for i in range (0, len(a), 1):
         c.append(a[i][1])
     d = []
     for i in range (0, len(b), 1):
         d.append(b[i][1])
-    f = []
+    f = []                              # Übertragsliste
     try:
         e = c.index(w)
         c = []
         c.append(a[e])
         f = []
         for i in range(0, len(a), 1):
+                                        # Isolieren der gesuchten Variable
             if(a[i][0] == "+" and i != e):
                 a[i][0] = "-"
                 f.append(a[i])
@@ -371,7 +374,7 @@ def umst(a,b,w):
                 c.append(cs)
             else:
                 f.append(b[i])
-    except ValueError:
+    except ValueError:                  # Gleiche Methode, nur dass die Variable auf der "falschen" Seite steht
         zw = a
         a = b
         b = zw
@@ -393,12 +396,12 @@ def umst(a,b,w):
             if (b[i] == w):
                 pass
             f.append(b[i])
-    c = add(c)
+    c = add(c)                          # c wird nun nochmal vereinfacht
     if(c[0][0] == "-"):
         m = c[0][2]*-1
     else:
         m = c[0][2]
-    for i in range (0, len(f), 1):
+    for i in range (0, len(f), 1):      # der Faktor der gesuchten Variablen wird nun bei beiden Termen dividiert
         try:
             if(f[i][1] in alphabet):
                 f[i][2] = f[i][2]/m
