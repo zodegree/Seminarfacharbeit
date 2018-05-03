@@ -507,7 +507,7 @@ def GL_SYS():
     HIN = Label(nframe, text="Beachten sie: 2x muss als 2*x eingegeben werden").pack(side="top")
     IN = Entry(nframe)
     IN.pack(side="bottom")
-    B = Button(nframe, text="Eingabe einlesen", command=lambda: GL_PRINT()).pack(side="bottom",fill=BOTH)
+    B = Button(nframe, text="Eingabe einlesen", command=lambda: GL_PRINT()).pack(side="bottom")
     nframe.mainloop()
 
 
