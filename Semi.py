@@ -353,7 +353,7 @@ def umst(a,b,w):
     d = []
     for i in range (0, len(b), 1):
         d.append(b[i][1])
-    f = []                              # Übertragsliste
+    f = []                              # Endspeicher
     try:
         e = c.index(w)
         c = []
