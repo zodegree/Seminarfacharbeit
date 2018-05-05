@@ -405,7 +405,7 @@ def umst(a,b,w):
         try:
             if(f[i][1] in alphabet):
                 f[i][2] = f[i][2]/m
-        except:
+        except TypeError:
             f[i][1] = f[i][1]/m
     c[0][2] = 1
     return (c, f)
@@ -427,6 +427,6 @@ def umst(a,b,w):
 #gll3 = add(wo[0])
 #glr3 = add(wo[1])
 #print(out(gll3)+"="+out(glr3))
-#print(ü("x*5=y","x"))
+#print(ü("2x+4x=6","x"))
 #print(sy("(4-x)*7+y=x","x")
 #print(10/3)
