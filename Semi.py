@@ -216,7 +216,7 @@ def vereinf(x):
                     if (q==0):
                         return 0
                     gl[i][1]=q[0][1]
-            else:                       # Variablen der Form ax werden in ein Array umgewandelt
+            else:                       # Variablen der Form ax/ohne Faktor werden in ein Array umgewandelt
                 for k in range(0, len(t), 1):
                     if(t[k] in alphabet and k!=0):
                         gl[i].append(float(t[:k]))

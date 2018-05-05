@@ -389,6 +389,7 @@ def Lernprogramm():
         else:
             L = Label(nframe, text="Lösung oder Eingabeform ist Falsch! Das richtige Ergebnis lautet:"+outpr).pack(side="top")
 
+    # Erstellung von zwei zufällig generierten Termen
     left_obj = []
     right_obj = []
     left_objanz = random.randrange(1,5,1)
@@ -421,7 +422,7 @@ def Lernprogramm():
     out = Semi.out(left_obj)+"="+Semi.out(right_obj)
     if("x" not in out):
         out = out+"x"
-    T = Label(nframe,width=70,text="Lösen sie folgende Gleichung. Beachten sie dabei die Form x=errechnete Zahl\n, zu nutzen, sowie die errechnete Zahl als auf 2 Dezimalstellen \nnach dem Komma nach dem Bruch anzugeben\n. Bei Zahlen, welche auf ,00 enden würden bitte .0 angeben. \n Im allgemeinen ist das Komma durch einen Punkt zu ersetzen.")
+    T = Label(nframe,width=70,text="Lösen sie folgende Gleichung. Beachten sie dabei die Form x=errechnete Zahl,\n zu nutzen, sowie die errechnete Zahl auf 2 Dezimalstellen \nnach dem Komma nach dem Bruch anzugeben.\n Bei Zahlen, welche auf ,00 enden würden bitte .0 angeben. \n Im allgemeinen ist das Komma durch einen Punkt zu ersetzen.")
     T.pack(side="top")
     L = Label(nframe,text=out).pack(side="top")
     IN = Entry(nframe)
@@ -434,7 +435,13 @@ def GL_UMST():
         popup.destroy()
 
     def GL_PRINT(n,w):
-        if (Semi.ü(n, w) == "ERROR"):
+        if (w not in n):
+            popup = Tk()
+            popup.title("WARNUNG")
+            L = Label(popup, text=w+" ist nicht in der eingegebenen Gleichung vorhanden").pack(side="top")
+            B = Button(popup, text='Ok', command=lambda: popup.destroy()).pack(side="top")
+            popup.mainloop()
+        elif (Semi.ü(n, w) == "ERROR"):
             print("ERROR")
             L = Label(nframe, text=Semi.sy(n,w),bg="white").grid(row=3,column=1,sticky=W+E)
 
@@ -472,6 +479,7 @@ def GL_SYS():
     #alphabet = "abcdefghijklmnopqrstuvwxyz"
     nframe = Tk()
     nframe.title("Gleichungssysteme berechnen")
+    HIN = Label(nframe, text="Beachten sie: 2x muss als 2*x eingegeben werden").pack(side="top")
     n = []
 
     #def GL_RES():
@@ -527,28 +535,27 @@ def GL_SYS():
 mainframe = Tk() # create a Tk mainframe window
 mainframe.title("Gleichungsprogramm")
 
-w = 400 # width for the Tk mainframe
-h = 325 # height for the Tk mainframe
+w = 400 # Breite des Fensters
+h = 325 # Höhe des Fensters
 
-# get screen width and height
-ws = mainframe.winfo_screenwidth() # width of the screen
-hs = mainframe.winfo_screenheight() # height of the screen
+# erkennen der Bildschirmauflösung
+ws = mainframe.winfo_screenwidth()
+hs = mainframe.winfo_screenheight()
 
-# calculate x and y coordinates for the Tk mainframe window
+# Berechnen der x und y Koordinate für das Fenster
 x = (ws/2) - (w/2)
 y = (hs/2) - (h/2)
 
-# set the dimensions of the screen
-# and where it is placed
+# Position und Größe des Fenster
 mainframe.geometry('%dx%d+%d+%d' % (w, h, x, y))
 
 b1 = Button(mainframe, text="Gleichung umstellen", command=GL_UMST)
 b1.place(relx=0.5, rely=0.35, anchor=CENTER)
 b2 = Button(mainframe, text="Lernprogramm starten", command=Lernprogramm)
 b2.place(relx=0.5, rely=0.45, anchor=CENTER)
-b3 = Button(mainframe, text="Gleichungssysteme berechnen", command=GL_SYS)
+b3 = Button(mainframe, text="Gleichungssystem berechnen", command=GL_SYS)
 b3.place(relx=0.5, rely=0.55, anchor=CENTER)
 b4 = Button(mainframe, text="Gleichungen graphisch anzeigen", command=GL_ANZ)
 b4.place(relx=0.5, rely=0.65, anchor=CENTER)
 
-mainframe.mainloop() # starts the mainloop
+mainframe.mainloop()
