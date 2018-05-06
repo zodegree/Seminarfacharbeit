@@ -480,9 +480,6 @@ def GL_SYS():
     #alphabet = "abcdefghijklmnopqrstuvwxyz"
     nframe = Tk()
     nframe.title("Gleichungssysteme berechnen")
-    HINT = Label(nframe, text="Bitte geben sie die zum Gleichungen,\nwelche zum Glichungssytem gehören an!").pack(side="top")
-    HIN = Label(nframe, text="Beachten sie: 2x muss als 2*x eingegeben werden").pack(side="top")
-    HIN2 = Label(nframe, text="Geben sie jeweils nur eine Gleichung mit einem Gleichungszeichen an").pack(side="top")
     n = []
 
     #def GL_RES():
@@ -528,7 +525,10 @@ def GL_SYS():
 
     for widget in nframe.winfo_children():
         widget.destroy()
+    HINT = Label(nframe, text="Bitte geben sie die Gleichungen,\nwelche zum Gleichungssytem gehören, an!").pack(
+        side="top")
     HIN = Label(nframe, text="Beachten sie: 2x muss als 2*x eingegeben werden").pack(side="top")
+    HIN2 = Label(nframe, text="Geben sie jeweils nur eine Gleichung mit einem Gleichungszeichen an").pack(side="top")
     IN = Entry(nframe)
     IN.pack(side="bottom")
     B = Button(nframe, text="Eingabe einlesen", command=lambda: GL_PRINT()).pack(side="bottom")
