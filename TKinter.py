@@ -364,17 +364,18 @@ def GL_ANZ():
                     p.create_text(175, 200 + 10 * i, text=-i * qy)
 
             master.mainloop()
-    L = Label(nframe,text="y=c*x^2+b*x+a").grid(row=0,columnspan=2)
-    L2 = Label(nframe,text="c = ").grid(row=1,column=0)
+    HINT = Label(nframe, text="Bitte geben sie die Werte der folgenden Gleichung an!").grid(row=0,columnspan=2)
+    L = Label(nframe,text="y=c*x^2+b*x+a").grid(row=1,columnspan=2)
+    L2 = Label(nframe,text="c = ").grid(row=2,column=0)
     IN1 = Entry(nframe)
-    IN1.grid(row=1,column=1)
-    L3 = Label(nframe, text="b = ").grid(row=2, column=0)
+    IN1.grid(row=2,column=1)
+    L3 = Label(nframe, text="b = ").grid(row=3, column=0)
     IN2 = Entry(nframe)
-    IN2.grid(row=2, column=1)
-    L4 = Label(nframe, text="a = ").grid(row=3, column=0)
+    IN2.grid(row=3, column=1)
+    L4 = Label(nframe, text="a = ").grid(row=4, column=0)
     IN3 = Entry(nframe)
-    IN3.grid(row=3, column=1)
-    B = Button(nframe,text="Eingaben übernehmen", command=Scal).grid(row=4,columnspan=2)
+    IN3.grid(row=4, column=1)
+    B = Button(nframe,text="Eingaben übernehmen", command=Scal).grid(row=5,columnspan=2)
     nframe.mainloop()
 
 def Lernprogramm():
@@ -479,7 +480,9 @@ def GL_SYS():
     #alphabet = "abcdefghijklmnopqrstuvwxyz"
     nframe = Tk()
     nframe.title("Gleichungssysteme berechnen")
+    HINT = Label(nframe, text="Bitte geben sie die zum Gleichungen,\nwelche zum Glichungssytem gehören an!").pack(side="top")
     HIN = Label(nframe, text="Beachten sie: 2x muss als 2*x eingegeben werden").pack(side="top")
+    HIN2 = Label(nframe, text="Geben sie jeweils nur eine Gleichung mit einem Gleichungszeichen an").pack(side="top")
     n = []
 
     #def GL_RES():
